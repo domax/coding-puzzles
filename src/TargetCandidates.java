@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * For given list of integer values named "candidates", write a solution to generate all possible
  * unique combinations of elements that have a target sum.
- * <p>E.g. for given combinations: [10, 1, 2, 7, 1, 6, 2, 5] and target sum 8, the result should
+ * <p>E.g. for given candidates: [10, 1, 2, 7, 1, 6, 2, 5] and target sum 8, the result should
  * be like:
  * <pre><code>
  * [[1, 2, 5], [2, 1, 5], [2, 6], [1, 1, 6], [1, 7], [7, 1], [6, 2]]
