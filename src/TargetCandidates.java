@@ -55,7 +55,7 @@ public class TargetCandidates {
     final List<Integer> candidates =
         Optional.of(args)
             .filter(a -> a.length > 0)
-            .map(a -> Arrays.stream(a[0].split("\\s,\\s")).map(Integer::parseInt).toList())
+            .map(a -> Arrays.stream(a[0].split("\\s*,\\s*")).map(Integer::parseInt).toList())
             .orElseGet(() -> List.of(10, 1, 2, 7, 1, 6, 2, 5));
     final int target =
         Optional.of(args)
