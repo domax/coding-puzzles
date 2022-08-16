@@ -1,10 +1,7 @@
 import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 
-import java.util.Arrays;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,40 +49,39 @@ import java.util.regex.Pattern;
  */
 public class PigLatin {
 
-  private static final Pattern consonants =
+  private static final Pattern WORDS = Pattern.compile("\\w+([a-zA-Z0-9_']+\\w+)?");
+  private static final Pattern CONSONANTS =
       Pattern.compile("^([bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ']+)(.*)$");
-  private static final Pattern vowels = Pattern.compile("^[aeiouyAEIOUY']+.*$");
+  private static final Pattern VOWELS = Pattern.compile("^[aeiouyAEIOUY']+.*$");
 
   public static String translate(String phrase) {
     if (ofNullable(phrase).filter(not(String::isEmpty)).isEmpty()) return phrase;
 
-    final AtomicReference<String> result = new AtomicReference<>(phrase);
-    Arrays.stream(phrase.split("[^a-zA-Z0-9']+"))
-        .distinct()
-        .map(word -> Map.entry(word, toPigLatin(word)))
-        .forEach(
-            e -> result.set(result.get().replaceAll("\\b" + e.getKey() + "\\b", e.getValue())));
-
-    return result.get();
+    var result = phrase;
+    final Matcher m = WORDS.matcher(phrase);
+    while (m.find()) {
+      final String word = m.group(0);
+      result = result.replaceAll("\\b" + word + "\\b", toPigLatin(word));
+    }
+    return result;
   }
 
   private static String toPigLatin(String word) {
-    return Optional.of(consonants.matcher(word))
+    return Optional.of(CONSONANTS.matcher(word))
         .filter(Matcher::matches)
         .map(m -> m.group(2) + "-" + m.group(1) + "ay")
         .or(
             () ->
-                Optional.of(vowels.matcher(word))
+                Optional.of(VOWELS.matcher(word))
                     .filter(Matcher::matches)
                     .map(m -> m.group(0) + "-way"))
         .orElse(word);
   }
 
+  @SuppressWarnings("java:S106")
   public static void main(String[] args) {
     final String phrase =
-        Optional.of(args)
-            .filter(a -> a.length > 0)
-            .map(a -> a[0])
+        Utils.getArg(args, 0)
             .orElse("I've been wondering - what is the answer?!?!? How will we know it's correct?");
     System.out.println("phrase: " + phrase);
     System.out.println("result: " + translate(phrase));
