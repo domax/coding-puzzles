@@ -2,6 +2,7 @@ import static java.util.Optional.ofNullable;
 import static java.util.function.Predicate.not;
 
 import java.util.Optional;
+import java.util.function.IntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,8 +81,10 @@ public class PigLatin {
 
   @SuppressWarnings("java:S106")
   public static void main(String[] args) {
+    final IntFunction<Optional<String>> arg =
+        i -> Optional.of(args).filter(a -> a.length > i).map(a -> a[i]);
     final String phrase =
-        Utils.getArg(args, 0)
+        arg.apply(0)
             .orElse("I've been wondering - what is the answer?!?!? How will we know it's correct?");
     System.out.println("phrase: " + phrase);
     System.out.println("result: " + translate(phrase));

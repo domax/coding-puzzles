@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -55,11 +56,13 @@ public class TargetCandidates {
 
   @SuppressWarnings("java:S106")
   public static void main(String[] args) {
+    final IntFunction<Optional<String>> arg =
+        i -> Optional.of(args).filter(a -> a.length > i).map(a -> a[i]);
     final List<Integer> candidates =
-        Utils.getArg(args, 0)
+        arg.apply(0)
             .map(a -> Arrays.stream(a.split("\\s*,\\s*")).map(Integer::parseInt).toList())
             .orElseGet(() -> List.of(10, 1, 2, 7, 1, 6, 2, 5));
-    final int target = Utils.getArg(args, 1).map(Integer::parseInt).orElse(8);
+    final int target = arg.apply(1).map(Integer::parseInt).orElse(8);
     System.out.println("candidates: " + candidates);
     System.out.println("target: " + target);
     System.out.println("result: " + new TargetCandidates(candidates, target).get());
