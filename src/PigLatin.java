@@ -49,7 +49,7 @@ import java.util.regex.Pattern;
  */
 public class PigLatin {
 
-  private static final Pattern WORDS = Pattern.compile("\\w+([a-zA-Z0-9_']+\\w+)?");
+  private static final Pattern WORDS = Pattern.compile("\\w+(?:[a-zA-Z0-9_']+\\w)?");
   private static final Pattern CONSONANTS =
       Pattern.compile("^([bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ']+)(.*)$");
   private static final Pattern VOWELS = Pattern.compile("^[aeiouyAEIOUY']+.*$");
