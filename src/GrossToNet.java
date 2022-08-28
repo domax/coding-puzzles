@@ -46,9 +46,9 @@ public class GrossToNet {
     public double calculate(double grossSalary) {
       var netSalary = 0d;
       var grossLeft = grossSalary;
-      for (var bracket : rateBrackets) {
+      for (final var bracket : rateBrackets) {
         if (grossSalary > bracket.high) {
-          final double grossDiff = bracket.high - bracket.low;
+          final var grossDiff = bracket.high - bracket.low;
           grossLeft -= grossDiff;
           netSalary += grossDiff * (1d - bracket.rate);
         } else {
