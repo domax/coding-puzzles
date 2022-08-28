@@ -47,12 +47,13 @@ public class GrossToNet {
       var netSalary = 0d;
       var grossLeft = grossSalary;
       for (final var bracket : rateBrackets) {
+        final var kf = 1d - bracket.rate;
         if (grossSalary > bracket.high) {
           final var grossDiff = bracket.high - bracket.low;
           grossLeft -= grossDiff;
-          netSalary += grossDiff * (1d - bracket.rate);
+          netSalary += grossDiff * kf;
         } else {
-          netSalary += grossLeft * (1d - bracket.rate);
+          netSalary += grossLeft * kf;
           break;
         }
       }
