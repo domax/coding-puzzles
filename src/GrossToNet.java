@@ -71,8 +71,6 @@ public class GrossToNet {
                 new RateBracket(20_000d, 40_000d, 0.4d),
                 new RateBracket(40_000d, Double.MAX_VALUE, 0.5d)));
     Stream.of(10_000d, 15_000d, 25_000d, 50_000d)
-        .forEach(
-            gross ->
-                System.out.printf("gross: %.2f; net: %.2f%n", gross, calculator.calculate(gross)));
+        .forEach(v -> System.out.printf("gross: %.2f; net: %.2f%n", v, calculator.calculate(v)));
   }
 }
