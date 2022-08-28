@@ -1,5 +1,6 @@
 import static java.util.Comparator.comparing;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -27,21 +28,20 @@ import java.util.stream.Stream;
  */
 public class GrossToNet {
 
-  interface NetSalaryCalculator {
+  public interface NetSalaryCalculator {
     double calculate(double grossSalary);
   }
 
-  record RateBracket(double low, double high, double rate) {}
-  static final List<RateBracket> rateBrackets =
-      Stream.of(
-              new RateBracket(0d, 10_000d, 0d),
-              new RateBracket(10_000d, 20_000d, 0.2d),
-              new RateBracket(20_000d, 40_000d, 0.4d),
-              new RateBracket(40_000d, Double.MAX_VALUE, 0.5d))
-          .sorted(comparing(RateBracket::low))
-          .toList();
+  public record RateBracket(double low, double high, double rate) {}
 
-  public static class NetSalaryCalculatorImpl implements NetSalaryCalculator {
+  private static class NetSalaryCalculatorImpl implements NetSalaryCalculator {
+
+    private final List<RateBracket> rateBrackets;
+
+    private NetSalaryCalculatorImpl(Collection<RateBracket> rateBrackets) {
+      this.rateBrackets = rateBrackets.stream().sorted(comparing(RateBracket::low)).toList();
+    }
+
     @Override
     public double calculate(double grossSalary) {
       var netSalary = 0d;
@@ -63,8 +63,16 @@ public class GrossToNet {
 
   @SuppressWarnings("java:S106")
   public static void main(String[] args) {
-    final NetSalaryCalculator calculator = new NetSalaryCalculatorImpl();
+    final NetSalaryCalculator calculator =
+        new NetSalaryCalculatorImpl(
+            List.of(
+                new RateBracket(0d, 10_000d, 0d),
+                new RateBracket(10_000d, 20_000d, 0.2d),
+                new RateBracket(20_000d, 40_000d, 0.4d),
+                new RateBracket(40_000d, Double.MAX_VALUE, 0.5d)));
     Stream.of(10_000d, 15_000d, 25_000d, 50_000d)
-        .forEach(v -> System.out.printf("gross: %.2f; net: %.2f%n", v, calculator.calculate(v)));
+        .forEach(
+            gross ->
+                System.out.printf("gross: %.2f; net: %.2f%n", gross, calculator.calculate(gross)));
   }
 }
