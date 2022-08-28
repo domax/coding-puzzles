@@ -60,6 +60,7 @@ public class GrossToNet {
     }
   }
 
+  @SuppressWarnings("java:S106")
   public static void main(String[] args) {
     final NetSalaryCalculator calculator = new NetSalaryCalculatorImpl();
     Stream.of(10_000d, 15_000d, 25_000d, 50_000d)
