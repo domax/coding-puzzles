@@ -58,7 +58,7 @@ public class TargetCandidates {
   public static void main(String[] args) {
     final IntFunction<Optional<String>> arg =
         i -> Optional.of(args).filter(a -> a.length > i).map(a -> a[i]);
-    final List<Integer> candidates =
+    final var candidates =
         arg.apply(0)
             .map(a -> Arrays.stream(a.split("\\s*,\\s*")).map(Integer::parseInt).toList())
             .orElseGet(() -> List.of(10, 1, 2, 7, 1, 6, 2, 5));

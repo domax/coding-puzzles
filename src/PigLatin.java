@@ -59,9 +59,9 @@ public class PigLatin {
     if (ofNullable(phrase).filter(not(String::isEmpty)).isEmpty()) return phrase;
 
     var result = phrase;
-    final Matcher m = WORDS.matcher(phrase);
+    final var m = WORDS.matcher(phrase);
     while (m.find()) {
-      final String word = m.group(0);
+      final var word = m.group(0);
       result = result.replaceAll("\\b" + word + "\\b", toPigLatin(word));
     }
     return result;
@@ -83,7 +83,7 @@ public class PigLatin {
   public static void main(String[] args) {
     final IntFunction<Optional<String>> arg =
         i -> Optional.of(args).filter(a -> a.length > i).map(a -> a[i]);
-    final String phrase =
+    final var phrase =
         arg.apply(0)
             .orElse("I've been wondering - what is the answer?!?!? How will we know it's correct?");
     System.out.println("phrase: " + phrase);
